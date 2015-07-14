@@ -5,6 +5,12 @@ var views = {
   '/1': function() {
     return h('h2', 'View 1');
   },
+  // '/1': {
+  //   view: (state) => {
+  //     return h('h2', ``);
+  //   },
+  //   model: () => Cycle.Rx.Observable.interval(1000)
+  // },
   '/2': function() {
     return h('h2', 'View 2');
   }
@@ -16,6 +22,14 @@ var views = {
 //   intent: function() {}
 // });
 
+function view(r) {
+  let route = views[r];
+  let intent = route.intent ? route.intent() : null;
+  let model = route.model ? route.model(intent) : null;
+  let view = route.view ? route.view(model) : null;
+
+  return view;
+}
 function main(responses) {
   let route$ = Cycle.Rx.Observable.fromEvent(window, 'hashchange')
         .map(ev => ev.newURL.match(/\#[^\#]*$/)[0].replace('#', ''))
