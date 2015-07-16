@@ -23,7 +23,8 @@ var views = {
       return error$.map(err =>
                         h('div', [
                           h('input#name'),
-                          h('span.error', err.alphanumeric ? 'Must be alphanumeric.' : '')]));
+                          h('span.error', err.alphanumeric ? 'Must be alphanumeric.' : '')
+                        ]));
     },
     intent: function(DOM) {
       return DOM.get('input#name', 'input').map(ev => ev.target.value);
