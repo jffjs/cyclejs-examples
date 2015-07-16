@@ -1,5 +1,6 @@
 import Cycle from '@cycle/core';
 import {makeDOMDriver, h} from '@cycle/web';
+import {isAlphanumeric} from 'validator';
 
 var views = {
   '/1': {
@@ -12,13 +13,17 @@ var views = {
   },
   '/2':{
     model: function(input$) {
-      return input$.map(val => val.toUpperCase()).startWith('');
+      return input$.map(val => {
+        return {
+          alphanumeric: !isAlphanumeric(val)
+        };
+      }).startWith({});
     },
-    view: function(model$) {
-      return model$.map(name =>
+    view: function(error$) {
+      return error$.map(err =>
                         h('div', [
                           h('input#name'),
-                          h('h2', name)]));
+                          h('span.error', err.alphanumeric ? 'Must be alphanumeric.' : '')]));
     },
     intent: function(DOM) {
       return DOM.get('input#name', 'input').map(ev => ev.target.value);
